@@ -5,6 +5,9 @@ These functions should bevalid for `RTL8372`, `RTL8372N`, `RTL8373`, and `RTL837
 
 `N`-version doesn't seems to have all the GPIO pins available on the outside of the package.
 
+Pads 0..27 are the LED pads. How they are driven (LED sets, pad mux and
+per-port selection) is described in [Port LED control](leds.md).
+
 | GPIO | Function | TYPE | MUX REG, BIT | (RTL8372) PIN# | (RTL8372N) PIN# |
 | ----- | ---- | ---- |  ---- | ---- | ---- |
 | GPIO0 | LED0 | I/OPU | IO_MUX_SEL_0, BIT 0 | G1 | 12 |

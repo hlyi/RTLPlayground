@@ -117,6 +117,9 @@ Keep it as the first initializer and list the board-specific fields after it.
 | `led_mux_custom` / `led_mux[28]` | `1` plus the 28 mux values when the stock LED muxing does not fit the board |
 | `mac_flash_offset` | flash offset of the factory MAC address, omit or `0` if the board does not store one |
 
+How the LED fields select the physical pads is described in
+[Port LED control](leds.md).
+
 Each `struct sfp_port` entry holds `pin_detect`, `pin_los`, `pin_tx_disable`,
 `sds` (which SerDes drives the cage) and `i2c` (built with `I2CBUS(sda, scl)`,
 or `GPIO_NA`-based values where a cage has no such pin).

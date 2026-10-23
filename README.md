@@ -359,6 +359,7 @@ Enjoy playing!
 
 The following documents give further documentation on specific features of the RTL837x SoCs:
 - [Adding a new device](doc/adding-a-device.md)
+- [Port LED control](doc/leds.md)
 - [RTL8372/3 Feature support](doc/hardware.md)
 - [CPU Port](doc/CpuPort.md)
 - [L2 learning](doc/l2.md) 
