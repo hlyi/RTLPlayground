@@ -94,6 +94,9 @@ This script decodes LED configuration from a register dump file ( the output fro
   - Outputs LED mux configuration and set mappings
   - Decodes the pin mux registers (`PIN_MUX_0/1/2`, `0x7f8c`-`0x7f94`) and
     prints the function of every GPIO pin
+  - Decodes the high LEDs (`LED_27`, the system LED `LED_28_SYS` and `LED_29`)
+    from `PIN_MUX_0` and `LED_GLB_IO_EN` (`0x65dc`) and prints the
+    `.high_leds = { .mux = ..., .enable = ... }` line of a machine definition
 
 **Usage:**
 ```bash
@@ -108,6 +111,9 @@ python3 dec_leds_from_dump.py
   - Port selection mappings
   - Pin mux configuration: the three mux registers, then one row per pin
     with its register and field, the field value and the function it selects
+  - High LEDs (`LED_27`, `LED_28_SYS`, `LED_29`): one row per pad with its
+    `PIN_MUX_0` bit, its `LED_GLB_IO_EN` enable bit and its function, then the
+    `.high_leds` line of a machine definition
 
 **Requirements:**
 
@@ -136,6 +142,8 @@ firmware.
 
   - Reads the LED registers with `regget` and prints `.led_mux`, the four LED
     sets and the LED set each port uses
+  - Prints the high LEDs (`LED_27`, `LED_28_SYS`, `LED_29`) and the
+    `.high_leds` line, the same way as `dec_leds_from_dump.py`
   - Takes the port range from the chip model in register 0x0004: ports 0..8 on
     an RTL8373 (upper 16 bits `0x8373`), ports 3..8 on the RTL8372 boards;
     `--ports` overrides it

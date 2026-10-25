@@ -236,6 +236,12 @@ def pin_setting(pin, mux0, mux1, mux2):
     return "-", "-", fixed_pins.get(pin, "no mux field")
 
 
+# Pads 27-29 are the "high LEDs": LED_27, the system LED (LED_28_SYS) and the
+# RLDP LED (LED_29). Unlike pads 0-27 they have no field in LED_GLB_MUX_1..6;
+# their pin function is bit 27-29 of PIN_MUX_0 (0 = LED, 1 = GPIO) and their
+# driver enable is bit 27-29 of LED_GLB_IO_EN (1 = on), see doc/leds.md.
+high_leds = [(27, "LED_27"), (28, "LED_28_SYS"), (29, "LED_29")]
+
 mux0 = get_word(pin_mux_0)
 mux1 = get_word(pin_mux_1)
 mux2 = get_word(pin_mux_2)
@@ -250,3 +256,21 @@ print(f"{'Pin':<9}{'Field':<18}{'Value':<9}Function")
 for pin in range(64):
     field, val, function = pin_setting(pin, mux0, mux1, mux2)
     print(f"GPIO{pin:<5}{field:<18}{val:<9}{function}")
+
+# A machine definition gives the high LEDs as `struct high_leds`: leds_setup()
+# writes `.mux` into the PIN_MUX_0 bits and `.enable` into the LED_GLB_IO_EN
+# bits, so the names below are the macros (LED_27, LED_28_SYS, LED_29) of the
+# pads whose bit is set.
+print("\nHigh LEDs (pads 27-29):")
+print("PIN_MUX_0 bit 0 = LED, 1 = GPIO;  LED_GLB_IO_EN bit 1 = LED driver on")
+print(f"{'Pad':<9}{'PIN_MUX_0':<11}{'LED_GLB_IO_EN':<15}Function")
+for pin, name in high_leds:
+    function = pin_setting(pin, mux0, mux1, mux2)[2]
+    print(f"GPIO{pin:<5}{(mux0 >> pin) & 1:<11}{(glb_io_en >> pin) & 1:<15}{function}")
+mux_names = [name for pin, name in high_leds if (mux0 >> pin) & 1]
+enable_names = [name for pin, name in high_leds if (glb_io_en >> pin) & 1]
+print(
+    ".high_leds = { .mux = "
+    f"{' | '.join(mux_names) if mux_names else '0'}, .enable = "
+    f"{' | '.join(enable_names) if enable_names else '0'} }},"
+)
